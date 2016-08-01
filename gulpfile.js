@@ -43,7 +43,7 @@ function fork(id) {
       'authorization': `token ${token}`
     })
     .end(function (response) {
-      if (response.code === 200) {
+      if (response.code < 300) {
         resolve(response.body.id);
       } else {
         console.log(response);
@@ -67,6 +67,7 @@ gulp.task('fork_all', function (d) {
         fs.writeFileSync(gist.registry, JSON.stringify(registry, null, 3));
         console.log(`forked ${gist.id}, new id is ${newId}`);
       })
+      .catch(() => console.log(`failed to fork ${gist.id}`))
       .then(() => new Promise(resolve => setTimeout(() => resolve(), 3000)));
     }
 
